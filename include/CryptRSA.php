@@ -10,8 +10,8 @@
 class Crypt_RSA{
 
     // Public or private key
-    var $publicKey = '';
-    var $privateKey = '';
+    protected $publicKey = '';
+    protected $privateKey = '';
 
     /**
      * Create public / private key pair
@@ -21,7 +21,8 @@ class Crypt_RSA{
      * @param optional Integer $digest
      * @return array keys
      */
-    function createKey($bits = 1024, $digest = 'sha512'){
+    private function CreateKey($bits = 1024, $digest = 'sha512')
+    {
 
         $arResult = array();
 
@@ -42,6 +43,20 @@ class Crypt_RSA{
 
         return $arResult;
     }
+    
+     /**
+     * Show key array
+     *
+     * @access public
+     * @param N/A
+     * @show array public and private key 
+     */
+    public function ShowKey()
+    {
+    	echo '<pre>';
+		print_r($this->createKey());
+		echo '</pre>';
+    }
 
     /**
      * Loads a public or private key files
@@ -50,18 +65,22 @@ class Crypt_RSA{
      * @param String $key
      * @return N/A
      */
-    function loadKey($key){
+    public function LoadKey($filename)
+    {
 
-        if($key==false)
+        if($filename==false || !file_exists($filename))
             return false;
-
-        $this->publicKey = openssl_get_publickey(file_get_contents($key)); // Load publick key
-        $this->privateKey = openssl_get_privatekey(file_get_contents($key)); // Load private key
-
-        return false;
-
+		
+		$open_key = openssl_get_publickey(file_get_contents($filename));
+		
+		if($open_key){
+			$this->publicKey = $open_key;
+		}else{
+			$this->privateKey = openssl_get_privatekey(file_get_contents($filename)); // Load private key
+		}
+   
     }
-
+    
     /**
      * Encryption
      *
@@ -70,14 +89,15 @@ class Crypt_RSA{
      * @param String $plaintext
      * @return String
      */
-    function encrypt($plaintext=false){
+    public function Encrypt($plaintext=false)
+    {
 
-        if($plaintext==false)
-            return false;
+       if($plaintext==false)
+        	return false;
 
-        openssl_public_encrypt($plaintext, $encrypted, $this->publicKey);
+       openssl_public_encrypt($plaintext, $encrypted, $this->publicKey);
 
-        return chunk_split(base64_encode($encrypted));
+       return chunk_split(base64_encode($encrypted));
     }
 
     /**
@@ -88,7 +108,8 @@ class Crypt_RSA{
      * @param String $ciphertext
      * @return String
      */
-    function decrypt($ciphertext=false){
+    public function Decrypt($ciphertext=false)
+    {
 
         if($ciphertext==false)
             return false;
