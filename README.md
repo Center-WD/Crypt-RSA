@@ -3,7 +3,7 @@
 Author: Sergey Knyazew  
 Author site: http://iksweb.ru/  
 Author E-mail: info@iksweb.ru  
-PHP: 7.1 >  
+PHP: 7.1 >  (Tested php 8.0)
 
 Pure-PHP PKCS#1 compliant implementation of RSA.
 
@@ -20,7 +20,7 @@ Pure-PHP PKCS#1 compliant implementation of RSA.
 
 ```php
 <?php
-include_require($_SERVER['DOCUMENT_ROOT'].'/include/CryptRSA.php');
+require(__DIR__.'/include/CryptRSA.php');
 $rsa = new Crypt_RSA;
 ?>
 ```
@@ -29,7 +29,7 @@ $rsa = new Crypt_RSA;
 
 ```php
 <?php
-print_r($rsa->createKey());
+$rsa->ShowKey();
 ?>
 ```
 
@@ -41,11 +41,11 @@ print_r($rsa->createKey());
 ```php
 <?php
 // Шифруем текст по ключу
-$rsa->loadKey($_SERVER['DOCUMENT_ROOT'].'/rsa/openssl_publick.txt'); // load public key
-$contentsEncrypted = $rsa->encrypt('Текст для кодировки');
+$rsa->LoadKey(__DIR__.'/rsa/openssl_publick.txt'); // load public key
+$contentsEncrypted = $rsa->Encrypt('Текст для кодировки');
 ?>
 ```
-В $rsa->loadKey(''); необходимо указать путь до файла с открытым ключом. 
+В $rsa->LoadKey(''); необходимо указать путь до файла с открытым ключом. 
 
 # Дешифрация данных
 
@@ -54,10 +54,10 @@ $contentsEncrypted = $rsa->encrypt('Текст для кодировки');
 $contentsEncrypted = 'Код полученный на шаге 3';
 
 // Производим дешифрацию
-$rsa->loadKey($_SERVER['DOCUMENT_ROOT'].'/rsa/openssl_private.txt'); // load public key
-echo $rsa->decrypt($contentsEncrypted);
+$rsa->LoadKey(__DIR__.'/rsa/openssl_private.txt'); // load public key
+echo $rsa->Decrypt($contentsEncrypted);
 ?>
 ```
-В $rsa->loadKey(''); необходимо указать путь до файла с закрытым ключом. 
+В $rsa->LoadKey(''); необходимо указать путь до файла с закрытым ключом. 
 
 
